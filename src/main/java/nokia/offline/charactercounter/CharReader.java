@@ -6,19 +6,26 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 
+/**
+ * The class is responsible for parsing the file, and push the results into the cache 
+ * 
+ * @author Braa'
+ *
+ */
 public class CharReader implements Runnable {
 
-	private String fileDir;
+	private String filePath;
 
-	public CharReader(String fileDir) {
-		this.fileDir = fileDir;
+	public CharReader(String filePath) {
+		this.filePath = filePath;
 	}
 
 	private int charsCount[] = new int[26];
 
+	@Override
 	public void run() {
 
-		File file = new File(fileDir);
+		File file = new File(filePath);
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			readFile(br);
 		} catch (IOException e) {

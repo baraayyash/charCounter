@@ -11,12 +11,13 @@ import java.util.concurrent.TimeUnit;
  * @author Braa'
  *
  */
-public class FileReaderConsumer implements Runnable {
+public class CharReadersConsumer implements Runnable {
 	
 	private ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 	@Override
 	public void run() {
+		
 		while( ! CacheCenter.getCharReaderQueue().isEmpty() || ! CacheCenter.isAllFilesCollected()) {
 			try {
 				// Wait 50 ms for the producer
@@ -30,6 +31,7 @@ public class FileReaderConsumer implements Runnable {
 				this.executor.submit(charReader);
 				
 			} catch (InterruptedException e) {
+				// No Harm here.. should be able to try again
 				e.printStackTrace();
 			}
 		}
@@ -37,8 +39,10 @@ public class FileReaderConsumer implements Runnable {
 		this.executor.shutdown();
 		
 		try {
+			// Not all threads executed, then force stop
 			this.executor.awaitTermination(1, TimeUnit.DAYS);
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			e.printStackTrace();
 		}
 	}

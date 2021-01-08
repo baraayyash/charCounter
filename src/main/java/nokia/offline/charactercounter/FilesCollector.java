@@ -2,13 +2,11 @@ package nokia.offline.charactercounter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
  * The class is responsible for collecting the files and store them as runnable in queue
- * This class acts like a producer for the FileReaderConsumer
+ * This class acts like a producer for the CharReadersConsumer
  * 
  * @author Braa'
  *
@@ -16,29 +14,35 @@ import java.util.concurrent.TimeUnit;
 public class FilesCollector {
 
 	private File folder;
-	private ExecutorService executor;
 
 	public FilesCollector(File folder) {
 		this.folder = folder;
-		this.executor = Executors.newFixedThreadPool(1);
-		this.executor.submit(new FileReaderConsumer());
 	}
 
-	public void collectAndRead() throws InterruptedException {
+	
+	/**
+	 * This method will submit a CharReader threads for each file found 
+	 * 
+	 */
+	public void produceCharReaders() throws InterruptedException {
 		listFilesForFolder(folder);
 		CacheCenter.setAllFilesCollected(true);
-		this.executor.shutdown();
-		this.executor.awaitTermination(1, TimeUnit.DAYS);
 	}
 
+	/**
+	 * This method will loop through the directories to find files 
+	 * 
+	 */
 	public void listFilesForFolder(final File folder) throws InterruptedException {
 
 		ArrayList<File> subDirectories = new ArrayList<File>();
 
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
+				// loop into this later, give priority to pushing files to the queue
 				subDirectories.add(fileEntry);
 			} else {
+				// Push a CharReader into the Queue, FileReaderConsumer will take it and submits it
 				CacheCenter.getCharReaderQueue().offer(new CharReader(fileEntry.getAbsolutePath()), 10, TimeUnit.MINUTES);
 			}
 		}

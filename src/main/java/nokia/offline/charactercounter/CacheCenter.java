@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public class CacheCenter {
 
-	private static BlockingQueue<CharReader> CharReaderQueue = new LinkedBlockingQueue<CharReader>(100);
+	private static BlockingQueue<CharReader> charReaderQueue = new LinkedBlockingQueue<CharReader>(100);
 	
 	private static volatile boolean isAllFilesCollected = false;
 	
@@ -27,20 +27,11 @@ public class CacheCenter {
 		CacheCenter.isAllFilesCollected = isAllFilesCollected;
 	}
 	
-
 	public static AtomicReferenceArray<BigInteger> getCharsCountArray() {
 		return charsCountArray;
 	}
 
-	public static void setCharsCountArray(AtomicReferenceArray<BigInteger> charsCountArray) {
-		CacheCenter.charsCountArray = charsCountArray;
-	}
-
 	public static BlockingQueue<CharReader> getCharReaderQueue() {
-		return CharReaderQueue;
-	}
-
-	public static void setCharReaderQueue(BlockingQueue<CharReader> charReaderQueue) {
-		CharReaderQueue = charReaderQueue;
+		return charReaderQueue;
 	}
 }
