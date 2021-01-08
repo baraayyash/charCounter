@@ -1,0 +1,5 @@
+nokia\offline\charactercounter\CharReader.class
+nokia\offline\charactercounter\FilesCollector.class
+nokia\offline\charactercounter\CacheCenter.class
+nokia\offline\charactercounter\CharacterCounterApp.class
+nokia\offline\charactercounter\FileReaderConsumer.class
